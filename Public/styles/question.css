@@ -1,8 +1,219 @@
+/* General Styles */
 * {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   transition: all 0.3s ease;
 }
 
+/* Parallax Scrolling Effect */
+.parallax {
+  background-image: url('path_to_image.jpg');
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  animation: parallax 15s infinite linear;
+}
+
+@keyframes parallax {
+  0% {
+    background-position: center 0%;
+  }
+  50% {
+    background-position: center 50%;
+  }
+  100% {
+    background-position: center 0%;
+  }
+}
+
+/* Glow Effect */
+.glow-effect {
+  position: relative;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff52, #0099ff, #8600ff, #ff00f7);
+  background-size: 400%;
+  animation: glowing 20s linear infinite;
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes glowing {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Pulse Effect */
+.pulse {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Shimmer Text Effect */
+.shimmer-text {
+  background-image: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  color: #333;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* 3D Hover Effect (Tilt) */
+.tilt {
+  perspective: 500px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.tilt:hover {
+  transform: rotateX(10deg) rotateY(10deg);
+}
+
+.tilt .element {
+  transition: transform 0.3s ease-in-out;
+}
+
+.tilt:hover .element {
+  transform: rotateX(10deg) rotateY(10deg);
+}
+
+/* Shatter Effect */
+.shatter {
+  display: inline-block;
+  position: relative;
+  animation: shatter 1.2s ease forwards;
+}
+
+@keyframes shatter {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.1);
+  }
+  40% {
+    transform: scale(1.1) rotate(20deg);
+  }
+  60% {
+    transform: scale(0.9) rotate(-15deg);
+  }
+  80% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Shake Effect */
+.shake {
+  animation: shake 0.6s ease-in-out;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Background Color Shift */
+.bg-shift {
+  background: linear-gradient(45deg, #ff00c7, #ff7e00, #00d4ff, #00ff00, #ff0000);
+  background-size: 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Sliding In From Right */
+.slide-in-right {
+  transform: translateX(100%);
+  transition: transform 0.5s ease-out;
+}
+
+.slide-in-right.show {
+  transform: translateX(0);
+}
+
+/* Hover Rotate Effect */
+.rotate-hover {
+  transition: transform 0.5s ease;
+}
+
+.rotate-hover:hover {
+  transform: rotate(360deg);
+}
+
+/* Animated Progress Bar */
+.progress-bar {
+  width: 0;
+  height: 20px;
+  background-color: #4caf50;
+  animation: progress 3s ease-out forwards;
+}
+
+@keyframes progress {
+  100% {
+    width: 100%;
+  }
+}
+
+/* Custom Radio Button and Container */
 .radio-input input {
   display: none;
 }
@@ -21,11 +232,14 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Hover effects for radio-input */
 .radio-input:hover {
   transform: scale(1.02);
   box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite ease-in-out; /* Added pulse effect */
 }
 
+/* Flasherror Animation */
 .flasherror {
   background-color: #ef5353;
   color: white;
@@ -34,28 +248,10 @@
   width: fit-content;
   margin: 20px auto;
   border-radius: 5px;
-  animation: shake 0.5s ease-in-out;
+  animation: shake 0.5s ease-in-out; /* Shake effect */
 }
 
-/* Shake animation for flasherror */
-@keyframes shake {
-  0% {
-    transform: translateX(-10px);
-  }
-  25% {
-    transform: translateX(10px);
-  }
-  50% {
-    transform: translateX(-10px);
-  }
-  75% {
-    transform: translateX(10px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
+/* Fade-in animation for info */
 .info {
   margin-bottom: 10px;
   display: flex;
@@ -64,7 +260,6 @@
   animation: fadeIn 1s ease;
 }
 
-/* Fade-in animation for info */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -74,6 +269,7 @@
   }
 }
 
+/* Question hover effect */
 .question {
   color: rgb(49, 49, 49);
   font-size: 1.2rem;
@@ -85,8 +281,10 @@
 
 .question:hover {
   color: #645bff;
+  animation: shimmer 1.5s infinite linear; /* Shimmer effect */
 }
 
+/* Steps hover effect */
 .steps {
   background-color: rgb(0, 0, 0);
   padding: 6px 10px;
@@ -100,8 +298,10 @@
 .steps:hover {
   background-color: #645bff;
   transform: scale(1.1);
+  animation: pulse 2s infinite ease-in-out; /* Added pulse effect */
 }
 
+/* Radio Input Label Hover Effects */
 .radio-input label {
   display: flex;
   background-color: #fff;
@@ -120,8 +320,10 @@
   background-color: rgba(24, 24, 24, 0.13);
   border: 1px solid #bbb;
   transform: translateX(5px);
+  animation: glowing 20s linear infinite; /* Added glowing effect */
 }
 
+/* Result with Show Animation */
 .result {
   margin-top: 10px;
   font-weight: 600;
@@ -136,6 +338,7 @@
   transform: translateY(0);
 }
 
+/* Button styles */
 button {
   --primary-color: #645bff;
   --secondary-color: #fff;
@@ -158,6 +361,7 @@ button {
 button:hover {
   background-color: var(--hover-color);
   transform: translateY(-2px);
+  animation: pulse 2s infinite ease-in-out; /* Added pulse effect */
 }
 
 button .arrow-wrapper {
@@ -208,6 +412,7 @@ button:hover .arrow:before {
   }
 }
 
+/* Apply fade-in for radio-input, question, and button */
 .radio-input, .question, button {
   animation: fadeInUp 1s ease;
 }
