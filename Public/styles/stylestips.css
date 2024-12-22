@@ -1,3 +1,4 @@
+/* Basic body styling */
 body {
     background-color: #6b63ff;
     font-family: Arial, sans-serif;
@@ -5,12 +6,16 @@ body {
     padding: 0;
     color: #333;
 }
+
+/* Flexbox container for centering */
 .parent {
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+/* Child container with styling */
 .child {
     background-color: #fff;
     border: 5px solid wheat; /* Soft orange border */
@@ -22,24 +27,34 @@ body {
     animation: slideIn 1s ease-out;
     color: #4a4a4a; /* Darker text color for better readability */
 }
+
+/* Heading style */
 h1 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
+
+/* List style */
 ul {
     list-style-type: none;
     font-size: large;
     padding: 0;
 }
+
+/* List item style */
 li {
     margin-bottom: 10px;
     font-size: 1.2em;
 }
+
+/* Nested list item styling */
 li > ul > li {
     color: #6b63ff; /* Match the body background color */
     font-size: 1em;
 }
+
+/* Animation for slide-in effect */
 @keyframes slideIn {
     from {
         opacity: 0;

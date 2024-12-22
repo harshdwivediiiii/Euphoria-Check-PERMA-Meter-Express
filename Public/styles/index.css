@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;700&display=swap");
+
 *,
 *::after,
 *::before {
@@ -16,17 +17,28 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  background: linear-gradient(135deg, #4e73df, #1d3a6b);
   font-family: "Mulish", sans-serif;
 }
 
+/* CTA Card with Glow and Hover Effects */
 .cta-card {
   position: relative;
   width: 100rem;
   border-radius: 2rem;
   padding: 8.5rem;
   text-align: center;
-  background: linear-gradient(to bottom right, #173ab7, #5271e0);
+  background: linear-gradient(to bottom right, #4e73df, #1d3a6b);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
 }
+
+.cta-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  filter: brightness(1.1);
+}
+
 .cta-card::before {
   content: "";
   position: absolute;
@@ -38,38 +50,73 @@ body {
   height: calc(100% + 5rem);
   border-radius: 2rem;
   background-color: #dde5f9;
+  transition: background-color 0.3s ease;
 }
+
+.cta-card:hover::before {
+  background-color: #c9d7f3;
+}
+
 @media only screen and (max-width: 56.25em) {
   .cta-card::before {
     display: none;
   }
 }
+
+/* Container Styles */
 .cta-card__container {
   max-width: 46rem;
   margin: 0 auto;
 }
+
 @media only screen and (max-width: 56.25em) {
   .cta-card__container {
     max-width: 80%;
   }
 }
+
+/* Title Styles with Hover Color */
 .cta-card__title {
   margin-bottom: 1rem;
-  font-size: 3.6rem;
+  font-size: 4rem;
   font-weight: 700;
   color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  transition: color 0.3s ease;
 }
+
+.cta-card__title:hover {
+  color: #f3f8fe;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+/* Description Styles with Smooth Text Fade */
 .cta-card__description {
   max-width: 75%;
   margin: 0 auto;
   margin-bottom: 3rem;
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 300;
   color: #fff;
+  opacity: 0;
+  animation: fadeIn 1s forwards 0.5s;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Input Box with Focus Animation */
 .cta-card__input-box {
   position: relative;
 }
+
 .cta-card__input {
   width: 100%;
   padding: 2.2rem 2.5rem;
@@ -81,17 +128,20 @@ body {
   font-family: "Mulish", sans-serif;
   color: #fff;
   background-color: rgba(243, 248, 254, 0.4);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
-.cta-card__input::-moz-placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
+
 .cta-card__input::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
+
 .cta-card__input:focus {
-  outline: 4px solid rgba(218, 70, 218, 0.4);
-  border: 2px solid transparent;
+  border: 2px solid #f3f8fe;
+  box-shadow: 0 0 5px rgba(218, 70, 218, 0.5);
+  background-color: rgba(243, 248, 254, 0.8);
 }
+
+/* Button with Hover Animation */
 .cta-card__button {
   position: absolute;
   top: 50%;
@@ -106,36 +156,17 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  background-color: #f3f8fe;
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
-.cta-card__button path {
-  transition: all 0.3s ease;
+
+.cta-card__button:hover {
+  transform: translateY(-5px);
+  background-color: #da46da;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
-.cta-card__button:hover path {
-  stroke: rgb(218, 70, 218);
-}
-.cta-card__button:active {
-  transform: translate(0.3rem, -50%);
-}
-@media only screen and (max-width: 37.5em) {
-  .cta-card__button:active {
-    transform: none;
-  }
-}
-@media only screen and (max-width: 37.5em) {
-  .cta-card__button {
-    position: relative;
-    top: auto;
-    right: auto;
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 100rem;
-    margin-top: 1.2rem;
-    padding: 1.6rem;
-    transform: none;
-  }
-}
+
+/* Image Box with Hover Scale */
 .cta-card__img-box {
   position: absolute;
   left: 50%;
@@ -144,38 +175,57 @@ body {
   justify-content: space-between;
   gap: 4rem;
   transform: translate(-50%, 50%);
+  animation: slideUp 1s ease-out forwards;
 }
+
+@keyframes slideUp {
+  from {
+    transform: translate(-50%, 60%);
+  }
+  to {
+    transform: translate(-50%, 50%);
+  }
+}
+
 @media only screen and (max-width: 56.25em) {
   .cta-card__img-box {
     gap: 0;
   }
 }
+
 .cta-card__img {
   width: 9.4rem;
   height: 9.4rem;
   border: 0.8rem solid #fff;
   border-radius: 50%;
   box-shadow: 0 1.4rem 2.5rem -1.5rem rgba(82, 113, 224, 0.5);
-  transition: filter 0.3s ease;
+  transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
 }
+
 .cta-card__img:hover {
-  filter: grayscale(1);
+  transform: scale(1.1);
+  filter: grayscale(0.5);
+  box-shadow: 0 3rem 5rem rgba(82, 113, 224, 0.7);
 }
+
 @media only screen and (max-width: 56.25em) {
   .cta-card__img:hover {
     filter: none;
   }
 }
+
 @media only screen and (max-width: 37.5em) {
   .cta-card__img:hover {
-    transform: none;
+    transform: scale(1);
   }
 }
+
 @media only screen and (max-width: 56.25em) {
   .cta-card__img {
     margin-right: -2.4rem;
   }
 }
+
 @media only screen and (max-width: 37.5em) {
   .cta-card__img {
     width: 8.4rem;
@@ -183,13 +233,28 @@ body {
     border: 0.4rem solid #fff;
   }
 }
+
+/* Responsive Adjustments for CTA Card */
 @media only screen and (max-width: 67.5em) {
   .cta-card {
     width: 90%;
   }
 }
+
 @media only screen and (max-width: 56.25em) {
   .cta-card {
     padding: 6rem 0 8.5rem;
   }
-}/*# sourceMappingURL=index.css.map */
+}
+
+@media only screen and (max-width: 56.25em) {
+  .cta-card__input {
+    font-size: 1.8rem;
+  }
+  .cta-card__title {
+    font-size: 3.5rem;
+  }
+  .cta-card__description {
+    font-size: 1.8rem;
+  }
+}

@@ -15,18 +15,16 @@ sgMail.setApiKey(API_KEY)
 const PORT = 9000
 const app = express()
 const reciever_email = []
-
 const verdict = []
 
-app.use(express.static(__dirname + "/Public"));  //use this to use css files insie templates 
+// Middleware and setup
+app.use(express.static(__dirname + "/Public"));  
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(session({
   secret: process.env.SECRET,
   cookie: { maxAge : 60000 },
   resave: false,
   saveUninitialized: false
-
 }));
 app.use(flash());
 
@@ -34,14 +32,13 @@ app.set('views', __dirname + '/views');
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + '/Public'));
 
-
 app.get("/", (req, res) => {
   res.render("index")
 })
 
 app.post("/question", (req, res) => {
   const reciever = req.body.reciever_email
-  const validateEmail= (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(reciever) /* validate email */
+  const validateEmail = (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(reciever) 
   if(!validateEmail) return res.render("error",{errorMessage: "email validation failed!"})
 
   reciever_email.push(reciever)
@@ -56,179 +53,114 @@ app.post("/result", inputValidator, async (req, res) => {
   let m = (parseFloat(req.body.mvalue) + parseFloat(req.body.nvalue) + parseFloat(req.body.ovalue) + parseFloat(req.body.pvalue)) / 2
   let a = (parseFloat(req.body.qvalue) + parseFloat(req.body.rvalue) + parseFloat(req.body.svalue) + parseFloat(req.body.tvalue)) / 2
 
+  let recommendations = '';
+  let badge = '';
 
+  // Personalized recommendations and badge based on PERMA scores
   if (p < e && p < r && p < m && p < a) {
-    verdict.push("I've noticed that you've been experiencing some fluctuations in your positive emotions lately. It's completely normal to have ups and downs, but it's essential to take note of how you're feeling overall. Let's work together to identify activities and practices that bring you joy and help you maintain a positive outlook on life. Remember, small steps can lead to significant changes in your overall well-being.")
-  }
-  else if (r < p && r < e && r < m && r < a) {
-    verdict.push("I hope that you have healthy and positive relationships with others. However, nurturing these connections further can be very beneficial for your overall well-being. Let's discuss ways to deepen these relationships, communicate effectively, and build a support system that you can rely on during challenging times. Strong social ties contribute significantly to happiness and resilience.")
-  }
-  else if (e < r && e < r && e < m && e < a) {
-    verdict.push("I've observed that you haven't been as engaged and enthusiastic in your daily activities recently. It's crucial to find a sense of flow and fulfillment in what you do. Let's explore your interests and passions, and see how we can incorporate them into your routine. Engaging in activities that resonate with you can boost your energy and motivation, leading to a more satisfying and productive life.")
-  }
-  else if (m < r && m < p && m < e && m < a) {
-    verdict.push("It seems like you've been contemplating the bigger picture and searching for a sense of purpose in your life. Finding meaning is a journey that requires self-reflection and exploration of your values and aspirations. Let's work together to uncover your passions and align your actions with what truly matters to you. Discovering your sense of purpose will bring more fulfillment and a greater sense of direction.")
-  }
-  else if (a < r && a < p && a < m && a < e) {
-    verdict.push("I want you to know that i beleive you've achieved some remarkable things, and your hard work is commendable. However, I also sense that you might be setting high expectations for yourself. It's essential to recognize and celebrate your accomplishments, no matter how small they might seem. We'll work on setting realistic and achievable goals, which will give you a sense of progress and success, boosting your self-confidence and well-being.")
+    verdict.push("Your positive emotions seem to be low. Focus on activities that bring joy.")
+    recommendations = "We recommend you try mindfulness exercises or spend time in nature to boost positive emotions.";
+    badge = "Low Positive Emotions Badge";
+  } else if (r < p && r < e && r < m && r < a) {
+    verdict.push("Your relationships could use some nurturing. Build stronger social ties.");
+    recommendations = "Try engaging more with friends or join social activities to improve relationships.";
+    badge = "Low Relationships Badge";
+  } else if (e < r && e < m && e < p && e < a) {
+    verdict.push("Your engagement levels are low. Try to find activities that bring you flow.");
+    recommendations = "Consider picking up hobbies or projects that you feel passionate about to increase engagement.";
+    badge = "Low Engagement Badge";
+  } else if (m < r && m < p && m < e && m < a) {
+    verdict.push("You seem to be searching for meaning. Explore your passions and goals.");
+    recommendations = "Try setting goals aligned with your core values to increase your sense of purpose.";
+    badge = "Low Meaning Badge";
+  } else if (a < r && a < p && a < m && a < e) {
+    verdict.push("Your accomplishments are low. Focus on setting achievable goals.");
+    recommendations = "Start by setting small, achievable goals that can give you a sense of accomplishment.";
+    badge = "Low Accomplishment Badge";
   }
 
   if (isNaN(p) || isNaN(e) || isNaN(r) || isNaN(m) || isNaN(a)) {
-  
-    res.render("error",{ errorMessage: "We're just a few steps away! Please complete all questions to unveil your PERMA Score"})
-  }
-  else {
-
+    res.render("error", { errorMessage: "Please complete all questions to unveil your PERMA Score." })
+  } else {
     const message = {
       to: reciever_email.pop(),
       from: process.env.FROM,
-      subject: "Euphoria Check",
-      html: `<html>
-      <head>
-      <style>
-      @import url('https://fonts.googleapis.com/ css2?family=Poppins:wght@300;400&display=swap');
-      body {
-          font-family: 'Poppins', sans-serif;
-          background-color: #f4f4f4;
-          color: #333333;
-          margin: 0;
-          padding: 0;
-      }
-    
-      .container {
-          max-width: 600px;
-          margin: 0 auto;
-          padding: 20px;
-          background-color: #ffffff;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          border-radius: 8px;
-          margin-top: 30px;
-          text-align: center;
-          border-top: 6px solid #007bff; /* Adding a border-top accent */
-          box-shadow:0px 0px 13px;
-      }
-    
-      h1 {
-          color: #007bff;
-          text-align: center;
-          margin-bottom: 20px;
-      }
-    
-      p {
-          font-size: 16px;
-          line-height: 1.6;
-          margin-bottom: 15px;
-      }
-    
-      .scores {
-          font-size: 18px;
-          margin-bottom: 10px;
-          color:black;
-      }
-    
-      .verdict {
-          font-size: 24px; /* Increased font size for the verdict */
-          font-weight: bold;
-          color: 007bff;
-          margin-bottom: 20px;
-      }
-    
-      .footer {
-          text-align: center;
-          margin-top: 30px;
-          font-size: 14px;
-          color: #777777;
-      }
-    
-      .footer a {
-          color: #007bff;
-          text-decoration: none;
-      }
-    
-      /* Added some new styles */
-      .accent-bg {
-          background-color: #007bff;
-          color: #ffffff;
-          padding: 8px 12px;
-          border-radius: 4px;
-      }
-    
-      .cta-button {
-          display: inline-block;
-          padding: 10px 20px;
-          margin-top: 20px;
-          background-color: #007bff;
-          text-decoration: none;
-          border-radius: 4px;
-          
-      }
-    
-      .cta-button:hover {
-          background-color: #0056b3;
-          color:white;
-      }
-    </style>
-    </head>
-    <body>
-    <div class="container">
-      <h1>Euphoria Check</h1>
-      <p>Here are your PERMA scores:</p>
-      <p class="scores">Positive Emotions: ${p}</p>
-      <p class="scores">Engagement: ${e}</p>
-      <p class="scores">Relationships: ${r}</p>
-      <p class="scores">Meaning: ${m}</p>
-      <p class="scores">Accomplishment: ${a}</p>
-      <p class="verdict">${verdict.slice(-1)}</p>
-      <p class="accent-bg">Aryan Inguz</p> <!-- Accentuated name -->
-      <a href="https://euphoria-check-perma-meter-express.vercel.app/" class="cta-button" style="color:white;">Visit our website</a> <!-- Enhanced call-to-action button -->
-    </div>
-    <div class="footer">
-      <p>This email was sent via Euphoria Check. &copy; 2023</p>
-      <p>For more information, <a href="https://euphoria-check-perma-meter-express.vercel.app/">visit our website</a>.</p>
-    </div>
-      </body>
-      </html>
+      subject: "Euphoria Check Results",
+      html: `
+        <html>
+          <head>
+            <style>
+              body {
+                font-family: 'Poppins', sans-serif;
+                background-color: #f4f4f4;
+                color: #333;
+              }
+              .container {
+                max-width: 600px;
+                margin: 30px auto;
+                padding: 30px;
+                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                text-align: center;
+              }
+              h1 {
+                color: #007bff;
+              }
+              .cta-button {
+                padding: 12px 24px;
+                background-color: #007bff;
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                font-size: 16px;
+              }
+              .badge {
+                font-size: 16px;
+                color: #fff;
+                background-color: #28a745;
+                padding: 5px 10px;
+                border-radius: 5px;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Your PERMA Results</h1>
+              <p>Positive Emotions: ${p}</p>
+              <p>Engagement: ${e}</p>
+              <p>Relationships: ${r}</p>
+              <p>Meaning: ${m}</p>
+              <p>Accomplishment: ${a}</p>
+              <p><strong>Verdict:</strong> ${verdict.slice(-1)}</p>
+              <p><strong>Recommendation:</strong> ${recommendations}</p>
+              <p class="badge">${badge}</p>
+              <a href="https://yourwebsite.com" class="cta-button">Visit our website</a>
+            </div>
+          </body>
+        </html>
       `,
-    }
+    };
+    
     await sgMail
       .send(message)
       .then((response) => console.log("Email sent!"))
-      .catch((error) => console.log(error.message))
+      .catch((error) => console.log(error.message));
 
-    res.render("result", { pos: p, eng: e, mea: m, rel: r, acc: a })
+    res.render("result", { pos: p, eng: e, mea: m, rel: r, acc: a, recommendations, badge });
   }
-
-
 })
 
-app.post("/tips",function(req,res){
-  let p = (parseFloat(req.body.avalue) + parseFloat(req.body.bvalue) + parseFloat(req.body.cvalue) + parseFloat(req.body.dvalue)) / 2
-  let e = (parseFloat(req.body.evalue) + parseFloat(req.body.fvalue) + parseFloat(req.body.gvalue) + parseFloat(req.body.hvalue)) / 2
-  let r = (parseFloat(req.body.ivalue) + parseFloat(req.body.jvalue) + parseFloat(req.body.kvalue) + parseFloat(req.body.lvalue)) / 2
-  let m = (parseFloat(req.body.mvalue) + parseFloat(req.body.nvalue) + parseFloat(req.body.ovalue) + parseFloat(req.body.pvalue)) / 2
-  let a = (parseFloat(req.body.qvalue) + parseFloat(req.body.rvalue) + parseFloat(req.body.svalue) + parseFloat(req.body.tvalue)) / 2
+app.get("/mood-tracker", (req, res) => {
+  res.render("mood-tracker");
+});
 
-
-  if (p < e && p < r && p < m && p < a) {
-    res.render("positiveemotions")
-  }
-  else if (r < p && r < e && r < m && r < a) {
-    res.render("relationships")
-  }
-  else if (e < r && e < r && e < m && e < a) {
-    res.render("engagement")
-  }
-  else if (m < r && m < p && m < e && m < a) {
-    res.render("meaning")
-  }
-  else if (a < r && a < p && a < m && a < e) {
-    res.render("accomplishments")
-  }
-  else{
-    res.render("error",{ errorMessage: "We're just a few steps away! Please complete all questions to unveil your PERMA Score."})
-  }
-})
+app.post("/mood-tracker", (req, res) => {
+  const { mood } = req.body;
+  // Logic to save the mood in a database or session for tracking progress
+  res.redirect("/result");
+});
 
 app.listen(process.env.PORT || 8000, function () {
-  console.log("Server Started Sucessfully")
-})
+  console.log("Server Started Successfully")
+});
